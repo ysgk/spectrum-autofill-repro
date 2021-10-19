@@ -1,24 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Button, TextField } from '@adobe/react-spectrum'
+import { useForm, Controller } from 'react-hook-form'
+
+interface FormValues {
+  email: string
+  password: string
+}
 
 function App() {
+  const { control,handleSubmit } = useForm<FormValues>({ defaultValues: { email: '', password: '' } , mode: 'onChange'})
+
+  const onSubmit = (values: any) => {
+    console.log(values)
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller control={control} name='email' render={({ ref: _, ...field }) => (
+          <TextField {...field} type={'email'} label={'email'} UNSAFE_style={{ width: '100%'}}/>
+        )}/>
+        <Controller control={control} name='password' render={({ ref: _, ...field }) => (
+          <TextField {...field} type={'password'} label={'password'} UNSAFE_style={{ width: '100%'}}/>
+        )}/>
+        <Button variant='cta' type={'submit'}>送信</Button>
+      </form>
     </div>
   );
 }
